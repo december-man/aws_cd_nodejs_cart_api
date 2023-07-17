@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Order } from '../models';
 import { Knex } from 'knex';
 import pg from '../../index';
-import { createBrotliDecompress } from 'zlib';
 
 @Injectable()
 export class OrderService {
@@ -12,7 +11,6 @@ export class OrderService {
   }
 
   async create(trx: Knex.Transaction<any, any[]>, data: any) {
-    console.log('Creating transaction', data);
     const order = {
       user_id: data.user_id,
       cart_id: data.cart_id,

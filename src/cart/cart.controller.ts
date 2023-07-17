@@ -2,11 +2,9 @@ import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus, B
 import { BasicAuthGuard } from '../auth';
 import { Order, OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
-import { calculateCartTotal } from './models-rules';
+// import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
 import pg from '../index';
-import { Knex } from 'knex';
-import { ApiTags } from '@nestjs/swagger';
 
 interface RequestBody {
   product: {
@@ -18,7 +16,6 @@ interface RequestBody {
   count: number
 }
 
-@ApiTags('app')
 @Controller('api/profile/cart')
 export class CartController {
   constructor(

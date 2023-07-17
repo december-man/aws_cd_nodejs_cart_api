@@ -40,4 +40,5 @@ lerna-debug.log*
 # Other
 .env
 *.env
+.dockerignore
 cdk.out
