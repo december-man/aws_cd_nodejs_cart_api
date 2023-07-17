@@ -1,0 +1,3 @@
+# node_modules & dist folders are re-created whenever npm install + npm run build is run
+node_modules
+dist
