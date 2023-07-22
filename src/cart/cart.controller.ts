@@ -2,18 +2,20 @@ import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus, B
 import { BasicAuthGuard } from '../auth';
 import { Order, OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
-import { calculateCartTotal } from './models-rules';
+// import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
 import pg from '../index';
-import { Knex } from 'knex';
-import { ApiTags } from '@nestjs/swagger';
 
 interface RequestBody {
-  product_id: string;
-  count: number;
+  product: {
+    id: string,
+    price: number,
+    title: string,
+    description: string,
+  },
+  count: number
 }
 
-@ApiTags('app')
 @Controller('api/profile/cart')
 export class CartController {
   constructor(
@@ -32,7 +34,7 @@ export class CartController {
       message: 'OK',
       data: { 
         cart, 
-        //total: calculateCartTotal(cart) TODO
+        total: 666
       },
     }
   }
@@ -40,14 +42,14 @@ export class CartController {
   @UseGuards(BasicAuthGuard)
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body: RequestBody) { // TODO: validate body payload...
-    const cart = await this.cartService.updateByUserId(getUserIdFromRequest(req), body)
     console.log('Passing the following parameters:', body)
+    const cart = await this.cartService.updateByUserId(getUserIdFromRequest(req), body)
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
       data: {
         cart,
-        //total: calculateCartTotal(cart), TODO
+        total: 666
       }
     }
   }
@@ -82,12 +84,12 @@ export class CartController {
     let trx = await pg.transaction();
     try {
       console.log('checkout, transaction is about to start for', userId, cart);
-      // const total = calculateCartTotal(cart); TODO
+      const total = 666
       const order = await this.orderService.create(trx, {
-        ...body,
         user_id: userId,
         cart_id: cartId,
-        total: 1, // TODO
+        total: total,
+        ...body,
       }) as any as Order;
       console.log('order created, changing the cart status');
       const [{ status }] = await this.cartService.changeStatus(trx, cartId);
